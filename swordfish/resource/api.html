@@ -43,6 +43,164 @@
 		</li>
 	</ul>
 </div>
+<div class="box">
+	<h2>Class: Unique(unique.class.php)</h2>
+	<ul>
+		<li>
+			<h3>Properties</h3>
+			<ol>
+				<li><span class="protected">protected</span> $url</li>
+				<li><span class="protected">protected</span> $module</li>
+				<li><span class="protected">protected</span> $controller</li>
+				<li><span class="protected">protected</span> $action</li>
+				<li><span class="protected">protected</span> $hash</li>
+				<li><span class="protected">protected</span> $identifier</li>
+				<li><span class="protected">protected</span> $literals</li>
+				<li><span class="protected">protected</span> $phps</li>
+			</ol>
+		</li>
+		<li>
+			<h3>Methods</h3>
+			<ol>
+				<li><span class="public">public</span> void funtion __construct(string $url)</li>
+				<li><span class="public">public</span> void function __destruct(void)</li>
+				<li><span class="public">public</span> string function compiler(void)</li>
+				<li><span class="protected">protected</span> string function clearOriginalPhp(string $data)</li>
+				<li><span class="protected">protected</span> string function parseLiteral(string $data)</li>
+				<li><span class="protected">protected</span> string function restoreLiteral(string $data)</li>
+				<li><span class="protected">protected</span> string function parsePhp(string $data)</li>
+				<li><span class="protected">protected</span> string function restorePhp(string $data)</li>
+				<li><span class="protected">protected</span> string function parseSysConst(string $data)</li>
+				<li><span class="protected">protected</span> string function parseSysVar(string $data)</li>
+				<li><span class="protected">protected</span> string function parseUserVar(string $data)</li>
+				<li><span class="protected">protected</span> string function findTemplate(void)</li>
+				<li><span class="protected">protected</span> string function parseTemplate(string $data)</li>
+				<li><span class="protected">protected</span> string function getTemplate(void)</li>
+				<li><span class="protected">protected</span> string function findPrototype(string $name)</li>
+				<li><span class="protected">protected</span> string function parsePrototype(string $data)</li>
+				<li><span class="protected">protected</span> string function clearPrototype(string $data)</li>
+				<li><span class="protected">protected</span> ?string function getPrototype(string $name)</li>
+				<li><span class="protected">protected</span> string function findCache(void)</li>
+				<li><span class="protected">protected</span> boolean function setCache(string $data)</li>
+				<li><span class="protected">protected</span> ?string function getCache(void)</li>
+				<li><span class="protected">protected</span> string function findSys404(void)</li>
+				<li><span class="protected">protected</span> string function get404(void)</li>
+			</ol>
+		</li>
+	</ul>
+</div>
+<div class="box">
+	<h2>Class: Model(model.class.php)</h2>
+	<ul>
+		<li>
+			<h3>Properties</h3>
+			<ol>
+				<li><span class="protected">protected</span> $_memory</li>
+				<li><span class="protected">protected</span> $_rules</li>
+				<li><span class="protected">protected</span> $memory</li>
+				<li><span class="protected">protected</span> $database</li>
+				<li><span class="protected">protected</span> $datas</li>
+				<li><span class="protected">protected</span> $fields</li>
+				<li><span class="protected">protected</span> $messages</li>
+				<li><span class="protected">protected</span> $rules</li>
+			</ol>
+		</li>
+		<li>
+			<h3>Methods</h3>
+			<ol>
+				<li><span class="public">public</span> void function __construct(?string $memory = null, ?string $pass = null)</li>
+				<li><span class="public">public</span>  void function __destruct(void)</li>
+				<li><span class="public">public</span> ?scalar function __get()</li>
+				<li><span class="public">public</span> void function __set(string $prop, ?scalar $value)</li>
+				<li><span class="public">public</span> Model function distinct(?boolean $data = null)</li>
+				<li><span class="public">public</span> Model function field(?string $data = null)</li>
+				<li><span class="public">public</span> Model function table(?string $data = null)</li>
+				<li><span class="public">public</span> Model function join(?string $data = null)</li>
+				<li><span class="public">public</span> Model function where(?string $data = null)</li>
+				<li><span class="public">public</span> Model function group(?string $data = null)</li>
+				<li><span class="public">public</span> Model function having(?string $data = null)</li>
+				<li><span class="public">public</span> Model function order(?string $data = null)</li>
+				<li><span class="public">public</span> Model function limit(?int $num =null, int $offset =0)</li>
+				<li><span class="public">public</span> Model function release(void)</li>
+				<li><span class="public">public</span> Model function create(void)</li>
+				<li><span class="public">public</span> Model function data(array $datas)</li>
+				<li><span class="public">public</span> Model function clear(void)</li>
+				<li><span class="public">public</span> Model function rule(array $datas)</li>
+				<li><span class="public">public</span> boolean function validate(void)</li>
+				<li><span class="public">public</span> array function messages(void)</li>
+				<li><span class="public">public</span> integer function cmd(string $sql)</li>
+				<li><span class="public">public</span> array function query(string $sql)</li>
+				<li><span class="public">public</span> array function select(void)</li>
+				<li><span class="public">public</span> integer function add(void)</li>
+				<li><span class="public">public</span> integer function save(void)</li>
+				<li><span class="public">public</span> integer function delete(void)</li>
+				<li><span class="public">public</span> oolean function begin(void)</li>
+				<li><span class="public">public</span> boolean function end(void)</li>
+				<li><span class="public">public</span> boolean function rollback(void)</li>
+				<li><span class="public">public</span> ?string function sql(void)</li>
+				<li><span class="public">public</span> ?string function error(void)</li>
+				<li><span class="public">public</span> ?integer function id(void)</li>
+				<li><span class="protected">protected</span> void function database(?string $pass = null)</li>
+				<li><span class="protected">protected</span> void function clearDatabase(void))</li>
+				<li><span class="protected">protected</span> void function fields(string $memroy)</li>
+				<li><span class="protected">protected</span> array function filter(array $datas)</li>
+			</ol>
+		</li>
+	</ul>
+</div>
+<div class="box">
+	<h2>Class: Mysql(mysql.class.php)</h2>
+	<ul>
+		<li>
+			<h3>Properties</h3>
+			<ol>
+				<li><span class="protected">protected</span> $id</li>
+				<li><span class="protected">protected</span> $sql</li>
+				<li><span class="protected">protected</span> $error</li>
+				<li><span class="protected">protected</span> $reader</li>
+				<li><span class="protected">protected</span> $writer</li>
+				<li><span class="protected">protected</span> $ds</li>
+				<li><span class="protected">protected</span> $connectors</li>
+				<li><span class="protected">protected</span> $errConnectors</li>
+				<li><span class="protected">protected</span> $driverOptions</li>
+				<li><span class="protected">protected</span> $sqlCmds</li>
+				<li><span class="protected">protected</span> $sqlDatas</li>
+			</ol>
+		</li>
+		
+		<li>
+			<h3>Methods</h3>
+			<ol>
+				<li><span class="public">public</span> void function __construct(array $connectors)</li>
+				<li><span class="public">public</span> void function __destruct(void)</li>
+				<li><span class="public">public</span> ?string function __get(string $cmd)</li>
+				<li><span class="public">public</span> boolean function data(string $cmd, string $data)</li>
+				<li><span class="public">public</span> boolean function clear(?string $cmd = null)</li>
+				<li><span class="public">public</span> integer function cmd(string $sql)</li>
+				<li><span class="public">public</span> array function query(string $sql)</li>
+				<li><span class="public">public</span> array function select(void)</li>
+				<li><span class="public">public</span> integer function insert(array $datas)</li>
+				<li><span class="public">public</span> integer function update(array $datas)</li>
+				<li><span class="public">public</span> integer function delete(void)</li>
+				<li><span class="public">public</span> boolean function begin(void)</li>
+				<li><span class="public">public</span> boolean function end(void)</li>
+				<li><span class="public">public</span> boolean function rollback(void)</li>
+				<li><span class="public">public</span> ?string function error(void)</li>
+				<li><span class="public">public</span> ?string function sql(void)</li>
+				<li><span class="public">public</span> ?integer function id(void)</li>
+				<li><span class="public">public</span> array function fields(string $memory)</li>
+				<li><span class="protected">protected</span> string function map(string $type)</li>
+				<li><span class="protected">protected</span> boolean function link(string $operate = operate_read|operate_write)</li>
+				<li><span class="protected">protected</span> array function connector(string $operate = operate_read|operate_write)</li>
+				<li><span class="protected">protected</span> array function filter(array $datas = array(string $field => ?scalar $data,...))</li>
+				<li><span class="protected">protected</span> boolean function isNoEmpty(?string $data)</li>
+				<li><span class="protected">protected</span> void function change(string &$data, string $key)</li>
+				<li><span class="protected">protected</span> void function close(void)</li>
+				<li><span class="protected">protected</span> void function free(void)</li>
+			</ol>
+		</li>
+	</ul>
+</div>
 </body>
 </html>		
 
