@@ -1,7 +1,5 @@
 <?php
-declare(strict_types = 1)
-	;
-
+// declare(strict_types = 1);
 namespace Swift;
 
 class View {
@@ -22,7 +20,7 @@ class View {
 	protected $module;
 	protected $controller;
 	protected $action;
-	protected $idr = '[a-z][a-z0-9_]*';
+	protected $identifier = '[a-z][a-z0-9_]*';
 	protected $vars = array();
 	
 	/**
@@ -66,16 +64,16 @@ class View {
 		ob_start();
 		ob_implicit_flush(false);
 		extract($this->vars);
-		switch($engine) {
-			case 'unique' :
+		switch($engine){
+			case 'unique':
 				$unique = new Unique($url);
 				echo $unique->compiler();
 				break;
-			case 'php' :
+			case 'php':
 				$processor = new Processor($url);
 				echo $processor->compiler();
 				break;
-			default :
+			default:
 				//
 				break;
 		}
@@ -87,10 +85,10 @@ class View {
 	 */
 	public function assign(string $name, $value): bool {
 		$pattern = '/^' . $this->identifier . '$/si';
-		if(preg_match($pattern, $name)) {
+		if(preg_match($pattern, $name)){
 			$this->vars[$name] = $value;
 			return true;
-		} else
+		}else
 			return false;
 	}
 	
@@ -99,8 +97,8 @@ class View {
 	 */
 	public function assigns(array $vars): int {
 		$counter = 0;
-		foreach($vars as $name => $value) {
-			if($this->assign($name, $value)) $counter ++;
+		foreach($vars as $name => $value){
+			if($this->assign($name, $value)) $counter++;
 		}
 		return $counter;
 	}
@@ -124,12 +122,12 @@ class View {
 	protected function url(string $url): string {
 		if(is_null($url)) return $this->url;
 		$pattern = '/' . $this->identifier . '(\.' . $this->identifier . '){0,2}/';
-		if(preg_match($pattern, $url)) {
+		if(preg_match($pattern, $url)){
 			$num = count(explode('.', $url));
 			if(3 == $num) return $url;
 			elseif(2 == $num) return implode('.', array($this->module, $url));
 			elseif(1 == $num) return implode('.', array($this->module, $this->controller, $url));
-		} else
+		}else
 			return '';
 	}
 	//
