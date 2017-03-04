@@ -7,6 +7,7 @@ class Unique {
 	/**
 	 * swordfish_path
 	 * app_path
+	 * app_debug
 	 *
 	 * app_common = "_common"
 	 * app_resource = "resource"
@@ -21,11 +22,11 @@ class Unique {
 	 * template_cache_extra=".cache.html";
 	 */
 	protected $url;
+	protected $hash;
 	protected $module;
 	protected $controller;
 	protected $action;
-	protected $hash;
-	protected $name_regular = '[a-z][a-z0-9_]*';
+	protected $identifier = '[a-z][a-z0-9_]*';
 	protected $literals = array();
 	protected $phps = array();
 	
@@ -54,7 +55,7 @@ class Unique {
 	public function compiler(): string {
 		if(is_null($this->url)) return $this->get404();
 		$cache = $this->getCache();
-		return is_string($cache) && !app_debug ? $cache : $this->getTemplate();
+		return app_debug or is_null($cache) ? $this->getTemplate() : $cache;
 	}
 	
 	/**
@@ -68,8 +69,6 @@ class Unique {
 	/**
 	 * string protected function parseLiteral(string $data)
 	 */
-	protected function parse_literal(string $data): string {
-	}
 	protected function parseLiteral(string $data): string {
 		$this->literals = array();
 		$pattern = '/<literal>(.*?)<\/literal>/si';
@@ -99,7 +98,7 @@ class Unique {
 		$pattern = '/<php>(.*?)<\/php>/si';
 		return preg_replace_callback($pattern, function ($matches) {
 			$hash = md5($matches[1]);
-			$this->phps[$hash] = $matches[1];
+			$this->phps[$hash] = '<?php ' . $matches[1] . ' ?>';
 			return '<php>' . $hash . '</php>';
 		}, $data);
 	}
@@ -111,7 +110,7 @@ class Unique {
 		$pattern = '/<php>(.*?)<\/php>/si';
 		return preg_replace_callback($pattern, function ($matches) {
 			$hash = $matches[1];
-			return isset($this->phps[$hash]) ? '<?php ' . $this->phps[$hash] . ' ?>' : '';
+			return $this->phps[$hash] ?? '';
 		}, $data);
 	}
 	
@@ -161,6 +160,19 @@ class Unique {
 	}
 	
 	/**
+	 * string protected function getTemplate(void)
+	 */
+	protected function getTemplate(): string {
+		$data = $this->read($this->findTemplate());
+		if(is_string($data)){
+			$data = $this->parseTemplate($data);
+			$this->setCache($data);
+		}else
+			$data = $this->get404();
+		return $data;
+	}
+	
+	/**
 	 * string protected function parseTemplate(string $data)
 	 */
 	protected function parseTemplate(string $data): string {
@@ -174,32 +186,28 @@ class Unique {
 	}
 	
 	/**
-	 * string protected function getTemplate(void)
-	 */
-	protected function getTemplate(): string {
-		$data = $this->getFile($this->findTemplate());
-		if(is_string($data)){
-			$data = $this->parseTemplate($data);
-			$this->setCache($data);
-		}else
-			$data = $this->get404();
-		return $data;
-	}
-	
-	/**
-	 * string protected function findPrototype(string $name)
+	 * protected string function findPrototype(string $name)
 	 */
 	protected function findPrototype(string $name): string {
-		list($view, $prototype, $extra) = get_configs('view_layer', 'template_prototype_layer', 'template_prototype_extra');
-		$paths = array('.', app_path, $this->module, $view, $prototype, $name . $extra);
-		return implode('/', $paths);
+		$view = get_config('view_layer', 'view');
+		$prototype = get_config('view_prototype_layer', 'prototype');
+		$extension = get_config('template_prototype_extension', '.prototype.html');
+		$pathChildren = [app_path, $this->module, $view, $prototype, $name . $extension];
+		return implode('/', $pathChildren);
 	}
 	
 	/**
-	 * string protected function parsePrototype(string $data)
+	 * protected ?string function getPrototype(string $name)
+	 */
+	protected function getPrototype($name): string {
+		return $this->read($this->findPrototype());
+	}
+	
+	/**
+	 * protected string function parsePrototype(string $data)
 	 */
 	protected function parsePrototype(string $data): string {
-		$pattern = '/<prototype\s+url="(' . $this->name_regular . ')\s+/">/si';
+		$pattern = '/<prototype\s+url="(' . $this->identifier . ')\s+/">/si';
 		if(preg_match($pattern, $data, $matches)) $prototype = $this->getPrototype($matches[1]);
 		else return $data;
 		if(is_null($prototype)) return $data;
@@ -212,48 +220,33 @@ class Unique {
 		}, $prototype);
 	}
 	
-	/*
-	 * string protected function clearPrototype(string $data)
-	 */
-	protected function clearPrototype(string $data): string {
-		$patterns = array('/<prototype\s+url="' . $this->name_regular . '"\s+\/>/si', '/<sign\s+id="' . $this->name_regular . '">/si', '/<\/sign>/si');
-		return preg_replace($patterns, '', $data);
-	}
-	
 	/**
-	 * ?string protected function getPrototype(string $name)
-	 */
-	protected function getPrototype($name): string { // ?string
-		return $this->getFile($this->findPrototype());
-	}
-	
-	/**
-	 * string protected function findCache(void)
+	 * protected string function findCache(void)
 	 */
 	protected function findCache(): string {
 		$view = get_config('view_layer', 'view');
 		$cache = get_config('view_cache_layer', 'cache');
 		$extension = get_config('template_cache_extension', '.cache.html');
-		$fullNameChildren = array(app_path, $this->module, $view, $cache, $this->hash . $extension);
-		return implode('/', $fullNameChildren);
+		$pathChildren = array(app_path, $this->module, $view, $cache, $this->hash . $extension);
+		return implode('/', $pathChildren);
 	}
 	
 	/**
-	 * boolean protected function setCache(string $data)
+	 * protected ?string function getCache(void)
+	 */
+	protected function getCache(): string {
+		return $this->read($this->findCache());
+	}
+	
+	/**
+	 * protected boolean function setCache(string $data)
 	 */
 	protected function setCache(string $data): bool {
 		return $this->write($this->findCache(), $data);
 	}
 	
 	/**
-	 * ?string protected function getCache(void)
-	 */
-	protected function getCache(): string { // ?string
-		return $this->getFile($this->findCache());
-	}
-	
-	/**
-	 * string protected function findApp404(void)
+	 * protected string function findApp404(void)
 	 */
 	protected function findApp404(): string {
 		$common = get_config('app_common_layer', '_common');
@@ -264,7 +257,7 @@ class Unique {
 	}
 	
 	/**
-	 * string protected function findSys404(void)
+	 * protected string function findSys404(void)
 	 */
 	protected function findSys404(): string {
 		$resource = 'resource';
@@ -274,14 +267,14 @@ class Unique {
 	}
 	
 	/**
-	 * string protected function get404(void)
+	 * protected string function get404(void)
 	 */
 	protected function get404(): string {
 		$html = <<<'code'
 <!doctype html>
 <html>
 <head>
-	<title>Swift-Framework Message</title>
+	<title>Swordfish-Framework Message</title>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<meta charset="utf-8" />
 	<style type="text/css">
@@ -302,19 +295,19 @@ code;
 	}
 	
 	/**
-	 * boolean protected function write(string $path, string $data)
-	 */
-	protected function write(string $path, string $data): bool {
-		$num = @file_put_contents($path, $data);
-		return is_integer($num) ? true : false;
-	}
-	
-	/**
-	 * ?string protected function read(string $path)
+	 * protected ?string function read(string $path)
 	 */
 	protected function read(string $path): string {
 		$data = @file_get_contents($path);
 		return is_string($data) ? $data : null;
+	}
+	
+	/**
+	 * protected boolean function write(string $path, string $data)
+	 */
+	protected function write(string $path, string $data): bool {
+		$num = @file_put_contents($path, $data);
+		return is_integer($num) ? true : false;
 	}
 	
 	/**
