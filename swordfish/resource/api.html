@@ -16,7 +16,7 @@
 </head>
 <body>
 <div class="box">
-	<h2>Class: Porcessor(processor.class.php)</h2>
+	<h2>Class: Processor(processor.class.php)</h2>
 	<ul>
 		<li>
 			<h3>Properties</h3>
@@ -197,6 +197,103 @@
 				<li><span class="protected">protected</span> void function change(string &$data, string $key)</li>
 				<li><span class="protected">protected</span> void function close(void)</li>
 				<li><span class="protected">protected</span> void function free(void)</li>
+			</ol>
+		</li>
+	</ul>
+</div>
+<div>
+	<h2>Class: Controller(controller.class.php)</h2>
+	<ul>
+		<li>
+			<h3>Properties</h3>
+			<ol>
+				<li><span class="protected">protected</span> $view</li>
+			</ol>
+		</li>
+		
+		<li>
+			<h3>Methods</h3>
+			<ol>
+				<li><span class="public">public</span> void function __construct(void)</li>
+				<li><span class="public">public</span> void function __destruct(void)</li>
+				<li><span class="public">public</span> void function __set(string $name, mixed $value)</li>
+				<li><span class="public">public</span> boolean function __isset(string $name)</li>
+				<li><span class="public">public</span> void function display(string $data, string $type = null, string $charset = null)</li>
+				<li><span class="public">public</span> function output(string $data, string $type = null, string $charset = null)</li>
+				<li><span class="public">public</span> string function fetch(string $url)</li>
+				<li><span class="public">public</span> function ajax($data, $type)</li>
+				<li><span class="public">public</span> boolean function assign(string $name, mixed $value)</li>
+				<li><span class="public">public</span> integer function assigns(array $vars)</li>
+			</ol>
+		</li>
+	</ul>
+</div>
+<div class="box">
+	<h2>Class: Router(router.class.php)</h2>
+	<ul>
+		<li>
+			<h3>Properties</h3>
+			<ol>
+				<li><span class="protected">protected</span> $identifier</li>
+				<li><span class="protected">protected</span> $module</li>
+				<li><span class="protected">protected</span> $controller</li>
+				<li><span class="protected">protected</span> $action</li>
+				<li><span class="protected">protected</span> $params</li>
+				<li><span class="protected">protected</span> $url</li>
+			</ol>
+		</li>
+		
+		<li>
+			<h3>Methods</h3>
+			<ol>
+				<li><span class="public">public</span> void function __destruct(void)</li>
+				<li><span class="public">public</span> void function navigate(void)</li>
+				<li><span class="protected">protected</span> void function url(void)</li>
+				<li><span class="protected">protected</span> void function rewrite(void)</li>
+			</ol>
+		</li>
+	</ul>
+</div>
+<div class="box">
+	<h2>Class: View(view.class.php)</h2>
+	<ul>
+		<li>
+			<h3>Properties</h3>
+			<ol>
+				<li><span class="protected">protected</span> $url</li>
+				<li><span class="protected">protected</span> $module</li>
+				<li><span class="protected">protected</span> $controller</li>
+				<li><span class="protected">protected</span> $action</li>
+				<li><span class="protected">protected</span> $$identifier</li>
+				<li><span class="protected">protected</span> $vars</li>
+			</ol>
+		</li>
+		<li>
+			<h3>Methods</h3>
+			<ol>
+				<li><span class="public">public</span> void function __construct(void)</li>
+				<li><span class="public">public</span> void fnnction __destruct(void)</li>
+				<li><span class="public">public</span> void function display(?string $url = null, ?string $type = null, ?string $charset = null)</li>
+				<li><span class="public">public</span> void function appear(string $data, ?string $type = null, ?string $charset = null)</li>
+				<li><span class="public">public</span> string function fetch(string url)</li>
+				<li><span class="public">public</span> boolean function assign(string $name, mixed $value)</li>
+				<li><span class="public">public</span> integer function assigns(array $vars)</li>
+				<li><span class="protected">protected</span> void function render(string $data, ?string $doctype, ?string $charset))</li>
+				<li><span class="protected">protected</span> string protected function url(string ?$url)</li>
+			</ol>
+		</li>
+	</ul>
+</div>
+<div class="box">
+	<h2>Class: Validator(validator.class.php)</h2>
+	<ul>
+		<li>
+			<h3>Methods</h3>
+			<ol>
+				<li><span class="public">public</span> void function __construct(void)</li>
+				<li><span class="public">public</span> void function __destruct(void)</li>
+				<li><span class="public">public</span> boolean function required(string $data)</li>
+				<li><span class="public">public</span> boolean public function email(string $data)</li>
 			</ol>
 		</li>
 	</ul>
