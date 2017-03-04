@@ -19,7 +19,7 @@ $connectors=array(
 );
 
 $GLOBALS['_configs']['default_database_connector']=$connectors;
-$m=new \Swift\Model('product');
+$m=new \Swordfish\Model('product');
 print_r($m->limit()->select());
 echo $m->sql();
 
