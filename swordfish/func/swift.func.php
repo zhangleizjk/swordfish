@@ -252,38 +252,40 @@ function find_model_class(string $module, string $model): string {
  */
 function _i(string $name, $default = null, array $filters = null, string $type = null) {
 	$identifier = '[a-zA-Z][a-zA-Z0-9_]*';
-	$predefineds = array('global', 'server', 'env', 'request', 'get', 'post', 'session', 'cookie');
-	$pattern = '/^(' . implode('|', $predefineds) . ')\.(\*|' . $identifier . ')$/';
+	$keys = array('global', 'server', 'env', 'request', 'get', 'post', 'session', 'cookie');
+	$values = array($GLOBALS, $_SERVER, $_ENV, $_REQUEST, $_GET, $_POST, $_SESSION ?? array(), $_COOKIE);
+	$maps = array_combine($keys, $values);
+	$pattern = '/^(' . implode('|', $keys) . ')\.(\*|' . $identifier . ')$/';
 	if(preg_match($pattern, $name, $matches)){
-		list($predefined, $key) = array(strtoupper($matches[1]), $matches[2]);
-		$predefined = '_' . strtoupper($matches[1]);
+		$predefined = $maps[$matches[1]];
 		$key = $matches[2];
-		if('*' == $key) $datas = $$predefined;
-		elseif(isset($$predefined[$key])) $datas = $$predefined[$key];
+		if('*' == $key) $data = $predefined;
+		elseif(isset($predefined[$key])) $data = $predefined[$key];
 		else return $default;
-	}
-	return $default;
+	}else
+		return $default;
 	
 	if(is_null($filters)) $filters = get_config('default_var_filters', array('htmlspecialchars'));
 	$func = function ($data, $filter) {
 		try{
-			$data = $$filter($data);
+			$data = $filter($data);
 		}catch(Throwable $err){
 			// _log();
 		}
 		return $data;
 	};
 	foreach($filters as $filter){
-		if(is_array($datas)){
-			foreach($datas as $data){
-				$data = $func($data, $filter);
+		if(is_array($data)){
+			foreach($data as $value){
+				$value = $func($value, $filter);
 			}
 		}else
-			$datas = $func($datas, $filter);
+			$data = $func($data, $filter);
 	}
 	
 	if(!is_null($type)) settype($data, $type);
-	return $datas;
+	
+	return $data;
 }
 
 /**

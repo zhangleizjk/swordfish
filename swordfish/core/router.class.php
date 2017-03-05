@@ -8,10 +8,9 @@ class Router {
 	 * default_access_module = 'home'
 	 * default_access_controller = 'user'
 	 * default_access_action = 'login'
-	 * url_group_model =' rewrite'
+	 * url_parse_model = 'rewrite'
 	 * url_pathinfo_separator = '/'
 	 */
-	protected $namedChild = '[a-z]+(_[a-z]+)*';
 	protected $module;
 	protected $controller;
 	protected $action;
@@ -32,7 +31,7 @@ class Router {
 	 * public void function __destruct(void)
 	 */
 	public function __destruct() {
-		// echo '-destory-';
+		// echo '-swordfish-';
 	}
 	
 	/**
@@ -47,7 +46,7 @@ class Router {
 	 * protected void function url(void)
 	 */
 	protected function url(): void {
-		$model = get_config('url_group_model', 'rewrite');
+		$model = get_config('url_parse_model', 'rewrite');
 		switch($model){
 			case 'rewrite':
 				$this->rewrite();
@@ -61,15 +60,16 @@ class Router {
 	 * protected void function rewrite(void)
 	 */
 	protected function rewrite(): void {
-		//$url = rawurldecode(_i('server.PATH_INFO'));
-		$url=$_SERVER['PATH_INFO'];
+		$pathinfo = substr(rawurldecode(_i('server.PATH_INFO', '')), 1);
 		$separator = get_config('url_pathinfo_separator', '/');
-		$pattern = '/^\/' . $this->namedChild . '(\\' . $separator . $this->namedChild . '){2}.*$/';
-		if(!is_null($url) && preg_match($pattern, $url)){
-			$datas = explode($separator, substr($url, 1));
-			list($this->module, $this->controller, $this->action) = $datas;
-			$this->params = array_slice($datas, 3);
-			$this->url = $this->module . '.' . $this->controller . '.' . $this->action;
+		$children = explode($separator, $pathinfo);
+		if(count($children) >= 3){
+			$url = implode('.', array_slice($children, 0, 3));
+			if(is_url_regular($url)){
+				list($this->module, $this->controller, $this->action) = $children;
+				$this->params = array_slice($children, 3);
+				$this->url = $url;
+			}
 		}
 	}
 	//
