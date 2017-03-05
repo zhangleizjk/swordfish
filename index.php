@@ -9,4 +9,4 @@ if (version_compare( PHP_VERSION, $version, '<' )) die( $message );
 
 /**
  */
-require './swift/dispatcher.php';
+require './swordfish/dispatcher.php';

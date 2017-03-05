@@ -1,13 +1,14 @@
 <?php
 // declare(strict_types = 1);
-use Swift\Diagnosis;
-use Swift\Core;
-use Swift\App;
+use Swordfish\Diagnosis;
+use Swordfish\Core;
+use Swordfish\App;
+use Swordfish\Router;
 
 /**
  */
-defined('swift_path') ?: define('swift_path', './swift');
-defined('swift_diagnosis') ?: define('swift_diagnosis', true);
+defined('swordfish_path') ?: define('swordfish_path', './swordfish');
+defined('swordfish_diagnosis') ?: define('swordfish_diagnosis', true);
 defined('app_path') ?: define('app_path', './program');
 defined('app_debug') ?: define('app_debug', false);
 
@@ -21,7 +22,7 @@ function error(string $data): string {
 <!doctype html>
 <html>
 	<head>
-		<title>Swift-Framework Message</title>
+		<title>Swordfish-Framework Message</title>
 		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<meta charset="utf-8" />
 		<style type="text/css">
@@ -37,14 +38,14 @@ function error(string $data): string {
 	</body>
 </html>		
 code;
-	//return str_replace($searchs, $datas, $html);
+	// return str_replace($searchs, $datas, $html);
 	return preg_replace($patterns, $datas, $html);
 }
 
 /**
  */
 $file = 'diagnosis.class.php';
-$diagnosis = implode('/', array(swift_path, $file));
+$diagnosis = implode('/', array(swordfish_path, $file));
 @include_once $diagnosis;
 try{
 	$diagnosis = new Diagnosis();
@@ -61,7 +62,7 @@ if($messages){
 
 /**
  */
-$bootstrap = implode('/', array('.', swift_path, 'loader'));
+$bootstrap = implode('/', array(swordfish_path, 'loader'));
 
 /**
  */
@@ -78,8 +79,9 @@ $app = new App();
 $app->fire();
 
 /**
- * 
  */
+$router = new Router();
+$router->navigate();
 //
 
 

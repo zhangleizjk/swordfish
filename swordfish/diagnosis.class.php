@@ -1,6 +1,6 @@
 <?php
 // declare(strict_types = 1);
-namespace Swift;
+namespace Swordfish;
 
 class Diagnosis {
 	/**
@@ -36,8 +36,8 @@ class Diagnosis {
 	protected function folder(): Diagnosis {
 		$folders = array('loader', 'func', 'core', 'lib', 'conf', 'resource');
 		foreach($folders as $folder){
-			$here = implode('/', array(swift_path, $folder));
-			if(! is_dir($here)) $this->messages[] = 'System folder: [' . $folder . '] NO found. #_#';
+			$here = implode('/', array(swordfish_path, $folder));
+			if(!is_dir($here)) $this->messages[] = 'System folder: [' . $folder . '] NO found. #_#';
 		}
 		return $this;
 	}
@@ -49,8 +49,8 @@ class Diagnosis {
 		$folder = 'func';
 		$files = array('swift.func.php');
 		foreach($files as $file){
-			$here = implode('/', array(swift_path, $folder, $file));
-			if(! is_file($here)) $this->messages[] = 'System function file: [' . $file . '] No found. #_#';
+			$here = implode('/', array(swordfish_path, $folder, $file));
+			if(!is_file($here)) $this->messages[] = 'System function file: [' . $file . '] No found. #_#';
 		}
 		return $this;
 	}
@@ -63,8 +63,8 @@ class Diagnosis {
 		$files = array('router', 'controller', 'model', 'mysql', 'validator', 'view', 'processor', 'unique');
 		$extra = '.class.php';
 		foreach($files as $file){
-			$here = implode('/', array(swift_path, $folder, $file . $extra));
-			if(! is_file($here)) $this->messages[] = 'System core library file: [' . $file . $extra . '] NO found. #_#';
+			$here = implode('/', array(swordfish_path, $folder, $file . $extra));
+			if(!is_file($here)) $this->messages[] = 'System core library file: [' . $file . $extra . '] NO found. #_#';
 		}
 		return $this;
 	}
@@ -77,8 +77,8 @@ class Diagnosis {
 		$files = array();
 		$extra = '.class.php';
 		foreach($files as $file){
-			$here = implode('/', array(swift_path, $folder, $file . $extra));
-			if(! is_file($here)) $this->message[] = 'System extra library file: [' . $file . $extra . '] NO found. #_#';
+			$here = implode('/', array(swordfish_path, $folder, $file . $extra));
+			if(!is_file($here)) $this->message[] = 'System extra library file: [' . $file . $extra . '] NO found. #_#';
 		}
 		return $this;
 	}
@@ -90,8 +90,8 @@ class Diagnosis {
 		$folder = 'conf';
 		$files = array('swift.conf.php');
 		foreach($files as $file){
-			$here = implode('/', array(swift_path, $folder, $file));
-			if(! is_file($here)) $this->messages[] = 'System config file: [' . $file . '] No found. #_#';
+			$here = implode('/', array(swordfish_path, $folder, $file));
+			if(!is_file($here)) $this->messages[] = 'System config file: [' . $file . '] No found. #_#';
 		}
 		return $this;
 	}
@@ -103,8 +103,8 @@ class Diagnosis {
 		$folder = 'resource';
 		$files = array('nofound.html');
 		foreach($files as $file){
-			$here = implode('/', array(swift_path, $folder, $file));
-			if(! is_file($here)) $this->message[] = 'System resource file: [' . $file . '] NO found. #_#';
+			$here = implode('/', array(swordfish_path, $folder, $file));
+			if(!is_file($here)) $this->message[] = 'System resource file: [' . $file . '] NO found. #_#';
 		}
 		return $this;
 	}

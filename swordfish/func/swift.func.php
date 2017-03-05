@@ -99,10 +99,10 @@ function camel_to_database_named(string $data): string {
  * strng function database_to_camel_named(string $data)
  */
 function database_to_camel_named(string $data): string {
-	$pattern = '/_(a-z)/';
+	$pattern = '/_([a-z])/';
 	return preg_replace_callback($pattern, function ($matches) {
 		return strtoupper($matches[1]);
-	}, $data);
+	}, '_' . $data);
 }
 
 /**
@@ -223,9 +223,10 @@ function find_controller(string $module, string $controller): string {
  * string find_controller_class(string $module, string $controller)
  */
 function find_controller_class(string $module, string $controller): string {
+	$app_namespace = get_config('app_namespace', 'Code42');
 	$namespace = get_config('controller_namespace', 'Controller');
 	$extra = get_config('controller_class_extra', 'Controller');
-	return implode('\\', array('', app_namespace, database_to_camel_named($module), $namespace, database_to_camel_named($controller) . $extra));
+	return implode('\\', array('', $app_namespace, database_to_camel_named($module), $namespace, database_to_camel_named($controller) . $extra));
 }
 
 /**

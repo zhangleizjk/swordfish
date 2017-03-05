@@ -1,9 +1,8 @@
 <?php
-//require_once './swift/func/swift.func.php';
+use function Swordfish\database_to_camel_named;
 
-try{
-	$aa=file_get_contents('222.txt');
-	var_dump($aa);
-}catch(Throwable $err){
-	echo "error";
-}
+require_once './swordfish/func/swift.func.php';
+
+$data='home_user';
+$newdata=database_to_camel_named($data);
+echo $newdata;
