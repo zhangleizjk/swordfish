@@ -1,6 +1,6 @@
 <?php
 // declare(strict_types = 1);
-namespace Swift;
+namespace Swordfish;
 
 class View {
 	
@@ -37,7 +37,7 @@ class View {
 	 * void public fnnction __destruct(void)
 	 */
 	public function __destruct() {
-		//
+		// echo '-destory-';
 	}
 	
 	/**

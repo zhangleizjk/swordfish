@@ -7,6 +7,10 @@ use Swordfish\Router;
 
 /**
  */
+date_default_timezone_set('Asia/Shanghai');
+
+/**
+ */
 defined('swordfish_path') ?: define('swordfish_path', './swordfish');
 defined('swordfish_diagnosis') ?: define('swordfish_diagnosis', true);
 defined('app_path') ?: define('app_path', './program');

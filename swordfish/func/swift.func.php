@@ -248,6 +248,51 @@ function find_model_class(string $module, string $model): string {
 }
 
 /**
+ * string function get_app404(void)
+ */
+function find_app404(): string {
+	$common = get_config('common_layer', '_common');
+	$resource = get_config('resource_layer', 'resource');
+	$nofound = get_config('nofound_doc', '404.html');
+	return implode('/', array(app_path, $common, $resource, $nofound));
+}
+
+/**
+ * string function find_sys404(void)
+ */
+function find_sys404(): string {
+	$resource = 'resource';
+	$nofound = 'nofound.html';
+	return implode('/', array(swordfish_path, $resource, $nofound));
+}
+
+/**
+ * string find_log(void)
+ */
+function find_log(): string {
+	$runtime = get_config('runtime_layer', '_runtime');
+	$log = get_config('log_layer', 'log');
+	$logFile = get_config('log_doc', 'log.txt');
+	return implode('/', array(app_path, $runtime, $log, $logFile));
+}
+
+/**
+ * boolean function _log(string $message)
+ */
+function _log(string $message): bool {
+	$path = find_log();
+	$handle = @fopen($path, 'ab');
+	if(is_resource($handle)){
+		$now = date('Y-m-d H:i:s');
+		$record = '[' . $now . '] ' . $message . '\n';
+		$byteNum = @fwrite($handle, $record);
+		fclose($handle);
+		return is_int($byteNum) ? true : false;
+	}
+	return false;
+}
+
+/**
  * mixed function _i(string $name, $default = null, ?array $filters = null, ?string $type = null)
  */
 function _i(string $name, $default = null, array $filters = null, string $type = null) {
@@ -346,6 +391,45 @@ function _d(string $url, string $connector = null) {
 	}else
 		return _m(null, $connector);
 }
+
+/**
+ * ?string read_file(string $path)
+ */
+function read_file(string $path): string {
+	$data = @file_get_contents($path);
+	return is_string($data) ? $data : null;
+}
+
+/**
+ * string function get404(void)
+ */
+function get404(): string {
+	$html = <<<'code'
+<!doctype html>
+<html>
+<head>
+	<title>Swordfish-Framework Message</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta charset="utf-8" />
+	<style type="text/css">
+		*{maring:0; padding:0; font-family:'open sans','microsoft yahei'; font-size:16px;}
+		body {padding:50px;}
+	</style>
+</head>
+<body>
+	Sorry, 404 error. #_#
+</body>
+</html>		
+code;
+	$sys = read_file($this->find_sys404());
+	$app = read_file($this->find_app404());
+	if(is_string($app)) return $app;
+	elseif(is_string($sys)) return $sys;
+	else return $html;
+}
+
+//
+
 
 /**
  * boolean function is_integer_and_string_array(array $datas, boolean $strict = false)
