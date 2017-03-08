@@ -8,36 +8,55 @@ class View {
 	 * module_name
 	 * controller_name
 	 * action_name
-	 */
-	
-	/**
-	 * template_engine="unique"
-	 * echo_default_doctype="text/html"
-	 * echo_default_charset="utf-8"
-	 * http_cache_control="?"
+	 * template_engine = "unique"
+	 * default__echo_doctype = "text/html"
+	 * default_echo_charset = "utf-8"
+	 * http_cache_control = "private"
 	 */
 	protected $url;
 	protected $module;
 	protected $controller;
 	protected $action;
-	protected $identifier = '[a-z][a-z0-9_]*';
 	protected $vars = array();
 	
 	/**
 	 * void public function __construct(void)
 	 */
 	public function __construct() {
+		$this->url = module_name . '.' . controller_name . '.' . action_name;
 		$this->module = module_name;
 		$this->controller = controller_name;
 		$this->action = action_name;
-		$this->url = implode('.', array($this->module, $this->controller, $this->action));
 	}
 	
 	/**
 	 * void public fnnction __destruct(void)
 	 */
 	public function __destruct() {
-		// echo '-destory-';
+		// echo '-Destory-';
+	}
+	
+	/**
+	 * boolean public function assign(string $name, ?mixed $value)
+	 */
+	public function assign(string $name, $value): bool {
+		if(is_var_named_regular($name)){
+			$this->vars[$name] = $value;
+			return true;
+		}else
+			return false;
+	}
+	
+	/**
+	 * integer public function assigns(array $vars)
+	 * @$vars = [string $name => ?mixed $value,...]
+	 */
+	public function assigns(array $vars): int {
+		$counter = 0;
+		foreach($vars as $name => $value){
+			if($this->assign($name, $value)) $counter++;
+		}
+		return $counter;
 	}
 	
 	/**
@@ -49,17 +68,17 @@ class View {
 	}
 	
 	/**
-	 * void public function appear(string $data, ?string $type = null, ?string $charset = null)
+	 * void public function show(string $data, ?string $type = null, ?string $charset = null)
 	 */
-	public function appear(string $data, string $type = null, string $charset = null): void {
+	public function show(string $data, string $type = null, string $charset = null): void {
 		$this->render($data, $type, $charset);
 	}
 	
 	/**
-	 * string public function fetch(string url)
+	 * string public function fetch(?string url = null)
 	 */
-	public function fetch(string $url): string {
-		$engine = get_config('template_engine');
+	public function fetch(string $url = null): string {
+		$engine = get_config('template_engine', 'unique');
 		$url = $this->url($url);
 		ob_start();
 		ob_implicit_flush(false);
@@ -74,43 +93,38 @@ class View {
 				echo $processor->compiler();
 				break;
 			default:
-				//
+				$html = <<<'code'
+<!doctype html>
+<html>
+<head>
+	<title>SwordFish-Framework Message</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta charset="utf-8" />
+	<style type="text/css">
+		*{maring:0; padding:0; font-family:'Open Sans'; font-size:16px;}
+		body {padding:50px;}
+	</style>
+</head>
+<body>
+	Sorry, template engine error. #_#
+</body>
+</html>
+code;
+				echo $html;
 				break;
 		}
 		return ob_get_clean();
 	}
 	
 	/**
-	 * boolean public function assign(string $name, mixed $value)
-	 */
-	public function assign(string $name, $value): bool {
-		$pattern = '/^' . $this->identifier . '$/si';
-		if(preg_match($pattern, $name)){
-			$this->vars[$name] = $value;
-			return true;
-		}else
-			return false;
-	}
-	
-	/**
-	 * integer public function assigns(array $vars)
-	 */
-	public function assigns(array $vars): int {
-		$counter = 0;
-		foreach($vars as $name => $value){
-			if($this->assign($name, $value)) $counter++;
-		}
-		return $counter;
-	}
-	
-	/**
 	 * void protected function render(string $data, ?string $doctype, ?string $charset)
-	 * http://www.geekso.com/cache-control
-	 * http://www.runoob.com/http/http-header-fields.html
+	 * &http://www.geekso.com/cache-control
+	 * &http://www.runoob.com/http/http-header-fields.html
 	 */
 	protected function render(string $data, string $doctype, string $charset) {
-		list($doctype, $charset) = get_configs('echo_default_doctype', 'echo_default_charset');
-		$httpCacheControl = get_config("http_cache_control");
+		$doctype = $doctype ?? get_config('default_echo_doctype', 'text/html');
+		$charset = $charset ?? get_config('default_echo_charset', 'utf-8');
+		$httpCacheControl = get_config("http_cache_control", 'private');
 		header('Content-Type:' . $doctype . '; charset=' . $charset);
 		header('Cache-Control: ' . $httpCacheControl);
 		echo $data;
@@ -121,29 +135,10 @@ class View {
 	 */
 	protected function url(string $url): string {
 		if(is_null($url)) return $this->url;
-		$pattern = '/' . $this->identifier . '(\.' . $this->identifier . '){0,2}/';
-		if(preg_match($pattern, $url)){
-			$num = count(explode('.', $url));
-			if(3 == $num) return $url;
-			elseif(2 == $num) return implode('.', array($this->module, $url));
-			elseif(1 == $num) return implode('.', array($this->module, $this->controller, $url));
-		}else
-			return '';
+		elseif(is_url_regular($url)) return url;
+		elseif(is_url_regular($url, 2)) return implode('.', array($this->module, $url));
+		elseif(is_url_regular($url, 1)) return implode('.', array($this->module, $this->controller, $url));
+		else return '';
 	}
 	//
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

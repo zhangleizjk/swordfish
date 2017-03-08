@@ -59,6 +59,14 @@ function is_integer_array(array $datas, bool $strict = false): bool {
 }
 
 /**
+ * boolean function is_var_named_regular(string $data)
+ */
+function is_var_named_regular(string $data): bool {
+	$pattern='/^[a-z]+([A-Z]{2}|[A-Z][a-z]+)*/';
+	return preg_match($pattern, $data)?true: false;
+}
+
+/**
  * boolean function is_database_named_regular(string $data)
  */
 function is_database_named_regular(string $data): bool {
