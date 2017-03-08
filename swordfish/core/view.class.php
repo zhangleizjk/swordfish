@@ -20,7 +20,7 @@ class View {
 	protected $vars = array();
 	
 	/**
-	 * void public function __construct(void)
+	 * public void function __construct(void)
 	 */
 	public function __construct() {
 		$this->url = module_name . '.' . controller_name . '.' . action_name;
@@ -30,52 +30,29 @@ class View {
 	}
 	
 	/**
-	 * void public fnnction __destruct(void)
+	 * public void fnnction __destruct(void)
 	 */
 	public function __destruct() {
 		// echo '-Destory-';
 	}
 	
 	/**
-	 * boolean public function assign(string $name, ?mixed $value)
+	 * public void function display(?string $url = null, ?string $doctype = null, ?string $charset = null)
 	 */
-	public function assign(string $name, $value): bool {
-		if(is_var_named_regular($name)){
-			$this->vars[$name] = $value;
-			return true;
-		}else
-			return false;
-	}
-	
-	/**
-	 * integer public function assigns(array $vars)
-	 * @$vars = [string $name => ?mixed $value,...]
-	 */
-	public function assigns(array $vars): int {
-		$counter = 0;
-		foreach($vars as $name => $value){
-			if($this->assign($name, $value)) $counter++;
-		}
-		return $counter;
-	}
-	
-	/**
-	 * void public function display(?string $url = null, ?string $type = null, ?string $charset = null)
-	 */
-	public function display(string $url = null, string $type = null, string $charset = null): void {
+	public function display(string $url = null, string $doctype = null, string $charset = null): void {
 		$data = $this->fetch($url);
-		$this->render($data, $type, $charset);
+		$this->render($data, $doctype, $charset);
 	}
 	
 	/**
-	 * void public function show(string $data, ?string $type = null, ?string $charset = null)
+	 * public void function show(string $data, ?string $type = null, ?string $charset = null)
 	 */
 	public function show(string $data, string $type = null, string $charset = null): void {
 		$this->render($data, $type, $charset);
 	}
 	
 	/**
-	 * string public function fetch(?string url = null)
+	 * public string function fetch(?string url = null)
 	 */
 	public function fetch(string $url = null): string {
 		$engine = get_config('template_engine', 'unique');
@@ -98,7 +75,7 @@ class View {
 <html>
 <head>
 	<title>SwordFish-Framework Message</title>
-	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta charset="utf-8" />
 	<style type="text/css">
 		*{maring:0; padding:0; font-family:'Open Sans'; font-size:16px;}
@@ -117,7 +94,30 @@ code;
 	}
 	
 	/**
-	 * void protected function render(string $data, ?string $doctype, ?string $charset)
+	 * public boolean function assign(string $name, ?mixed $value)
+	 */
+	public function assign(string $name, $value): bool {
+		if(is_var_named_regular($name)){
+			$this->vars[$name] = $value;
+			return true;
+		}else
+			return false;
+	}
+	
+	/**
+	 * public integer function assigns(array $vars)
+	 * @$vars = [string $name => ?mixed $value,...]
+	 */
+	public function assigns(array $vars): int {
+		$counter = 0;
+		foreach($vars as $name => $value){
+			if($this->assign($name, $value)) $counter++;
+		}
+		return $counter;
+	}
+	
+	/**
+	 * protected void function render(string $data, ?string $doctype, ?string $charset)
 	 * &http://www.geekso.com/cache-control
 	 * &http://www.runoob.com/http/http-header-fields.html
 	 */
@@ -131,7 +131,7 @@ code;
 	}
 	
 	/**
-	 * string protected function url(string ?$url)
+	 * protected string function url(string ?$url)
 	 */
 	protected function url(string $url): string {
 		if(is_null($url)) return $this->url;

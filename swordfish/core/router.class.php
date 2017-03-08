@@ -11,11 +11,11 @@ class Router {
 	 * url_parse_model = 'rewrite'
 	 * url_pathinfo_separator = '/'
 	 */
+	protected $url;
 	protected $module;
 	protected $controller;
 	protected $action;
 	protected $params = array();
-	protected $url;
 	
 	/**
 	 * public void function __construct(void)
@@ -31,7 +31,7 @@ class Router {
 	 * public void function __destruct(void)
 	 */
 	public function __destruct() {
-		// echo '-swordfish-';
+		// echo '-Destory-';
 	}
 	
 	/**
