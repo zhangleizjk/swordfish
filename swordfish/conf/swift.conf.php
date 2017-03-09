@@ -6,10 +6,12 @@ return array(
 	 swift_diagnosis = true
 	 app_path = './program'
 	 app_debug = false
+	 module_name
+	 controller_name
+	 action_name
 	*/
 	
 	/*
-	'app_debug' => true, 
 	'app_common_layer' => '_common', 
 	'app_runtime_layer' => '_runtime',
 	'app_function_layer' => 'func', 
@@ -30,6 +32,10 @@ return array(
 	'template_cache_layer' => 'cache', 
 	'template_cache_extra' => '.cache.html', 
 	'ajax_default_type' => 'json', 
+	'template_engine' => 'unique',
+	'default__echo_doctype' => 'text/html',
+	'default_echo_charset' => 'utf-8',
+	'http_cache_control' => 'private',
 	*/
 		
 );

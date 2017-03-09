@@ -1,6 +1,6 @@
 <?php
 // declare(strict_types = 1);
-namespace Swift;
+namespace Swordfish;
 
 class Core {
 	
@@ -31,7 +31,7 @@ class Core {
 	protected function getSysFuncs(): Core {
 		$layer = 'func';
 		$file = 'swift.func.php';
-		$fullName = implode('/', array(swift_path, $layer, $file));
+		$fullName = implode('/', array(swordfish_path, $layer, $file));
 		if(is_file($fullName)) @include_once $fullName;
 		return $this;
 	}
@@ -41,7 +41,7 @@ class Core {
 	 */
 	protected function getClasses(string $dir): void {
 		$pattern = '/^[a-z]+(_[a-z]+)*\.class\.php$/';
-		$path = implode('/', array(swift_path, $dir));
+		$path = implode('/', array(swordfish_path, $dir));
 		if(is_dir($path)){
 			foreach(scandir($path) as $file){
 				$fullName = implode('/', array($path, $file));
@@ -74,7 +74,7 @@ class Core {
 	protected function getSysConfigs(): Core {
 		$layer = 'conf';
 		$file = 'swift.conf.php';
-		$fullName = implode('/', array(swift_path, $layer, $file));
+		$fullName = implode('/', array(swordfish_path, $layer, $file));
 		if(is_file($fullName)){
 			$configs = @include_once $fullName;
 			if(is_array($configs)){

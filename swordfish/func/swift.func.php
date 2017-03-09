@@ -59,6 +59,14 @@ function is_integer_array(array $datas, bool $strict = false): bool {
 }
 
 /**
+ * boolean function is_var_named_regular(string $data)
+ */
+function is_var_named_regular(string $data): bool {
+	$pattern='/^[a-z]+([A-Z]{2}|[A-Z][a-z]+)*/';
+	return preg_match($pattern, $data)?true: false;
+}
+
+/**
  * boolean function is_database_named_regular(string $data)
  */
 function is_database_named_regular(string $data): bool {
@@ -99,10 +107,10 @@ function camel_to_database_named(string $data): string {
  * strng function database_to_camel_named(string $data)
  */
 function database_to_camel_named(string $data): string {
-	$pattern = '/_(a-z)/';
+	$pattern = '/_([a-z])/';
 	return preg_replace_callback($pattern, function ($matches) {
 		return strtoupper($matches[1]);
-	}, $data);
+	}, '_' . $data);
 }
 
 /**
@@ -223,9 +231,10 @@ function find_controller(string $module, string $controller): string {
  * string find_controller_class(string $module, string $controller)
  */
 function find_controller_class(string $module, string $controller): string {
+	$app_namespace = get_config('app_namespace', 'Code42');
 	$namespace = get_config('controller_namespace', 'Controller');
 	$extra = get_config('controller_class_extra', 'Controller');
-	return implode('\\', array('', app_namespace, database_to_camel_named($module), $namespace, database_to_camel_named($controller) . $extra));
+	return implode('\\', array('', $app_namespace, database_to_camel_named($module), $namespace, database_to_camel_named($controller) . $extra));
 }
 
 /**
@@ -247,42 +256,89 @@ function find_model_class(string $module, string $model): string {
 }
 
 /**
+ * string function get_app404(void)
+ */
+function find_app404(): string {
+	$common = get_config('common_layer', '_common');
+	$resource = get_config('resource_layer', 'resource');
+	$nofound = get_config('nofound_doc', '404.html');
+	return implode('/', array(app_path, $common, $resource, $nofound));
+}
+
+/**
+ * string function find_sys404(void)
+ */
+function find_sys404(): string {
+	$resource = 'resource';
+	$nofound = 'nofound.html';
+	return implode('/', array(swordfish_path, $resource, $nofound));
+}
+
+/**
+ * string find_log(void)
+ */
+function find_log(): string {
+	$runtime = get_config('runtime_layer', '_runtime');
+	$log = get_config('log_layer', 'log');
+	$logFile = get_config('log_doc', 'log.txt');
+	return implode('/', array(app_path, $runtime, $log, $logFile));
+}
+
+/**
+ * boolean function _log(string $message)
+ */
+function _log(string $message): bool {
+	$path = find_log();
+	$handle = @fopen($path, 'ab');
+	if(is_resource($handle)){
+		$now = date('Y-m-d H:i:s');
+		$record = '[' . $now . '] ' . $message . '\n';
+		$byteNum = @fwrite($handle, $record);
+		fclose($handle);
+		return is_int($byteNum) ? true : false;
+	}
+	return false;
+}
+
+/**
  * mixed function _i(string $name, $default = null, ?array $filters = null, ?string $type = null)
  */
 function _i(string $name, $default = null, array $filters = null, string $type = null) {
 	$identifier = '[a-zA-Z][a-zA-Z0-9_]*';
-	$predefineds = array('global', 'server', 'env', 'request', 'get', 'post', 'session', 'cookie');
-	$pattern = '/^(' . implode('|', $predefineds) . ')\.(\*|' . $identifier . ')$/';
+	$keys = array('global', 'server', 'env', 'request', 'get', 'post', 'session', 'cookie');
+	$values = array($GLOBALS, $_SERVER, $_ENV, $_REQUEST, $_GET, $_POST, $_SESSION ?? array(), $_COOKIE);
+	$maps = array_combine($keys, $values);
+	$pattern = '/^(' . implode('|', $keys) . ')\.(\*|' . $identifier . ')$/';
 	if(preg_match($pattern, $name, $matches)){
-		list($predefined, $key) = array(strtoupper($matches[1]), $matches[2]);
-		$predefined = '_' . strtoupper($matches[1]);
+		$predefined = $maps[$matches[1]];
 		$key = $matches[2];
-		if('*' == $key) $datas = $$predefined;
-		elseif(isset($$predefined[$key])) $datas = $$predefined[$key];
+		if('*' == $key) $data = $predefined;
+		elseif(isset($predefined[$key])) $data = $predefined[$key];
 		else return $default;
-	}
-	return $default;
+	}else
+		return $default;
 	
 	if(is_null($filters)) $filters = get_config('default_var_filters', array('htmlspecialchars'));
 	$func = function ($data, $filter) {
 		try{
-			$data = $$filter($data);
+			$data = $filter($data);
 		}catch(Throwable $err){
 			// _log();
 		}
 		return $data;
 	};
 	foreach($filters as $filter){
-		if(is_array($datas)){
-			foreach($datas as $data){
-				$data = $func($data, $filter);
+		if(is_array($data)){
+			foreach($data as $value){
+				$value = $func($value, $filter);
 			}
 		}else
-			$datas = $func($datas, $filter);
+			$data = $func($data, $filter);
 	}
 	
 	if(!is_null($type)) settype($data, $type);
-	return $datas;
+	
+	return $data;
 }
 
 /**
@@ -343,6 +399,45 @@ function _d(string $url, string $connector = null) {
 	}else
 		return _m(null, $connector);
 }
+
+/**
+ * ?string read_file(string $path)
+ */
+function read_file(string $path): string {
+	$data = @file_get_contents($path);
+	return is_string($data) ? $data : null;
+}
+
+/**
+ * string function get404(void)
+ */
+function get404(): string {
+	$html = <<<'code'
+<!doctype html>
+<html>
+<head>
+	<title>Swordfish-Framework Message</title>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+	<meta charset="utf-8" />
+	<style type="text/css">
+		*{maring:0; padding:0; font-family:'open sans','microsoft yahei'; font-size:16px;}
+		body {padding:50px;}
+	</style>
+</head>
+<body>
+	Sorry, 404 error. #_#
+</body>
+</html>		
+code;
+	$sys = read_file($this->find_sys404());
+	$app = read_file($this->find_app404());
+	if(is_string($app)) return $app;
+	elseif(is_string($sys)) return $sys;
+	else return $html;
+}
+
+//
+
 
 /**
  * boolean function is_integer_and_string_array(array $datas, boolean $strict = false)
