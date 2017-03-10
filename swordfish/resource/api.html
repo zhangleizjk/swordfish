@@ -74,17 +74,20 @@
 				<li><span class="protected">protected</span> string function parseSysVar(string $data)</li>
 				<li><span class="protected">protected</span> string function parseUserVar(string $data)</li>
 				<li><span class="protected">protected</span> string function findTemplate(void)</li>
-				<li><span class="protected">protected</span> string function parseTemplate(string $data)</li>
 				<li><span class="protected">protected</span> string function getTemplate(void)</li>
+				<li><span class="protected">protected</span> string function parseTemplate(string $data)</li>
 				<li><span class="protected">protected</span> string function findPrototype(string $name)</li>
-				<li><span class="protected">protected</span> string function parsePrototype(string $data)</li>
-				<li><span class="protected">protected</span> string function clearPrototype(string $data)</li>
 				<li><span class="protected">protected</span> ?string function getPrototype(string $name)</li>
+				<li><span class="protected">protected</span> string function parsePrototype(string $data)</li>
 				<li><span class="protected">protected</span> string function findCache(void)</li>
-				<li><span class="protected">protected</span> boolean function setCache(string $data)</li>
 				<li><span class="protected">protected</span> ?string function getCache(void)</li>
+				<li><span class="protected">protected</span> boolean function setCache(string $data)</li>
+				<li><span class="protected">protected</span> string function findApp404(void)</li>
 				<li><span class="protected">protected</span> string function findSys404(void)</li>
 				<li><span class="protected">protected</span> string function get404(void)</li>
+				<li><span class="protected">protected</span> ?string function read(string $path)</li>
+				<li><span class="protected">protected</span> boolean function write(string $path, string $data)</li>
+				<li><span class="protected">protected</span> string function parseListTag(string $data)</li>
 			</ol>
 		</li>
 	</ul>
@@ -216,13 +219,13 @@
 			<ol>
 				<li><span class="public">public</span> void function __construct(void)</li>
 				<li><span class="public">public</span> void function __destruct(void)</li>
-				<li><span class="public">public</span> void function __set(string $name, mixed $value)</li>
+				<li><span class="public">public</span> void function __set(string $name, ?mixed $value)</li>
 				<li><span class="public">public</span> boolean function __isset(string $name)</li>
-				<li><span class="public">public</span> void function display(string $data, string $type = null, string $charset = null)</li>
-				<li><span class="public">public</span> function output(string $data, string $type = null, string $charset = null)</li>
-				<li><span class="public">public</span> string function fetch(string $url)</li>
-				<li><span class="public">public</span> function ajax($data, $type)</li>
-				<li><span class="public">public</span> boolean function assign(string $name, mixed $value)</li>
+				<li><span class="public">public</span> void function display(?string $url = null, ?string $doctype = null, ?string $charset = null)</li>
+				<li><span class="public">public</span> void function show(string $data, ?string $doctype = null, ?string $charset = null)</li>
+				<li><span class="public">public</span> string function fetch(?string $url = null)</li>
+				<li><span class="public">public</span> function ajax(string $data, ?string $type = null)</li>
+				<li><span class="public">public</span> boolean function assign(string $name, ?mixed $value)</li>
 				<li><span class="public">public</span> integer function assigns(array $vars)</li>
 			</ol>
 		</li>
@@ -234,7 +237,6 @@
 		<li>
 			<h3>Properties</h3>
 			<ol>
-				<li><span class="protected">protected</span> $identifier</li>
 				<li><span class="protected">protected</span> $module</li>
 				<li><span class="protected">protected</span> $controller</li>
 				<li><span class="protected">protected</span> $action</li>
@@ -246,6 +248,7 @@
 		<li>
 			<h3>Methods</h3>
 			<ol>
+				<li><span class="public">public</span> void function __construct(void)</li>
 				<li><span class="public">public</span> void function __destruct(void)</li>
 				<li><span class="public">public</span> void function navigate(void)</li>
 				<li><span class="protected">protected</span> void function url(void)</li>
@@ -264,7 +267,6 @@
 				<li><span class="protected">protected</span> $module</li>
 				<li><span class="protected">protected</span> $controller</li>
 				<li><span class="protected">protected</span> $action</li>
-				<li><span class="protected">protected</span> $$identifier</li>
 				<li><span class="protected">protected</span> $vars</li>
 			</ol>
 		</li>
@@ -273,13 +275,13 @@
 			<ol>
 				<li><span class="public">public</span> void function __construct(void)</li>
 				<li><span class="public">public</span> void fnnction __destruct(void)</li>
-				<li><span class="public">public</span> void function display(?string $url = null, ?string $type = null, ?string $charset = null)</li>
-				<li><span class="public">public</span> void function appear(string $data, ?string $type = null, ?string $charset = null)</li>
-				<li><span class="public">public</span> string function fetch(string url)</li>
-				<li><span class="public">public</span> boolean function assign(string $name, mixed $value)</li>
+				<li><span class="public">public</span> void function display(?string $url = null, ?string $doctype = null, ?string $charset = null)</li>
+				<li><span class="public">public</span> void function show(string $data, ?string $type = null, ?string $charset = null)</li>
+				<li><span class="public">public</span> string function fetch(?string url = null)</li>
+				<li><span class="public">public</span> boolean function assign(string $name, ?mixed $value)</li>
 				<li><span class="public">public</span> integer function assigns(array $vars)</li>
-				<li><span class="protected">protected</span> void function render(string $data, ?string $doctype, ?string $charset))</li>
-				<li><span class="protected">protected</span> string protected function url(string ?$url)</li>
+				<li><span class="protected">protected</span> void function render(string $data, ?string $doctype, ?string $charset)</li>
+				<li><span class="protected">protected</span> string function url(string ?$url)</li>
 			</ol>
 		</li>
 	</ul>
