@@ -7,7 +7,7 @@ class Router {
 	/**
 	 * default_access_module = 'home'
 	 * default_access_controller = 'user'
-	 * default_access_action = 'login'
+	 * default_access_action = 'hello'
 	 * url_parse_model = 'rewrite'
 	 * url_pathinfo_separator = '/'
 	 */
@@ -46,12 +46,13 @@ class Router {
 	 * protected void function url(void)
 	 */
 	protected function url(): void {
-		$model = get_config('url_parse_model', 'rewrite');
+		$model = get_config('url_parse_model', 'aa');
 		switch($model){
 			case 'rewrite':
 				$this->rewrite();
 				break;
 			default:
+				die(_msg('Sorry, url parse model configuration error. #_#'));
 				break;
 		}
 	}
