@@ -10,6 +10,8 @@ class Router {
 	 * default_access_action = 'hello'
 	 * url_parse_model = 'rewrite'
 	 * url_pathinfo_separator = '/'
+	 * static_route_rules = array()
+	 * pattern_route_rules = array()
 	 */
 	protected $url;
 	protected $module;
@@ -58,10 +60,20 @@ class Router {
 	}
 	
 	/**
+	 * protectd string function map(void)
+	 */
+	protected function map(): string {
+		$url = substr(rawurldecode(_i('server.PATH_INFO', '')), 1);
+		$rules = get_config('static_route_rules', array());
+		if(isset($rules[$url])) return (string)$rules[$url];
+		else return $url;
+	}
+	
+	/**
 	 * protected void function rewrite(void)
 	 */
 	protected function rewrite(): void {
-		$pathinfo = substr(rawurldecode(_i('server.PATH_INFO', '')), 1);
+		$pathinfo = $this->map();
 		$separator = get_config('url_pathinfo_separator', '/');
 		$children = explode($separator, $pathinfo);
 		if(count($children) >= 3){
