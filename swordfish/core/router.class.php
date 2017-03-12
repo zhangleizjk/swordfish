@@ -46,7 +46,7 @@ class Router {
 	 * protected void function url(void)
 	 */
 	protected function url(): void {
-		$model = get_config('url_parse_model', 'aa');
+		$model = get_config('url_parse_model', 'rewrite');
 		switch($model){
 			case 'rewrite':
 				$this->rewrite();

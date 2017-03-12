@@ -67,6 +67,14 @@ function is_var_named_regular(string $data): bool {
 }
 
 /**
+ * boolean function is_class_named_regular(string $data)
+ */
+function is_class_named_regular(string $data):bool {
+	$pattern = '/^[a-z]+(_[a-z]+)*\.class\.php$/';
+	return preg_match($pattern, $data)?true: false;
+}
+
+/**
  * boolean function is_database_named_regular(string $data)
  */
 function is_database_named_regular(string $data): bool {

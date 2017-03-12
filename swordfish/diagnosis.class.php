@@ -26,87 +26,96 @@ class Diagnosis {
 	 */
 	public function fire(): array {
 		$this->clearMessages();
-		$this->folder()->func()->core()->library()->config()->resource();
+		$this->checkFolders()->checkFuncs()->checkCores()->checkLibraries()->checkConfigs()->checkResources();
 		return $this->errMessages;
 	}
 	
 	/**
-	 * protected Diagnosis function folder(void)
+	 * protected Diagnosis function checkFolders(void)
 	 */
-	protected function folder(): Diagnosis {
-		$folders = array('loader', 'func', 'core', 'lib', 'conf', 'resource');
-		foreach($folders as $folder){
-			$path = implode('/', array(swordfish_path, $folder));
-			if(!is_dir($path)) $this->errMessages[] = 'Sorry, system folder: [' . $folder . '] NO found. #_#';
+	protected function checkFolders(): Diagnosis {
+		$directories = array('loader', 'func', 'core', 'lib', 'conf', 'resource');
+		foreach($directories as $directory){
+			$path = implode('/', array(swordfish_path, $directory));
+			if(!is_dir($path)) $this->message('Sorry, system folder : [' . $directory . '] NO found. #_#');
 		}
 		return $this;
 	}
 	
 	/**
-	 * protected Diagnosis function func(void)
+	 * protected Diagnosis function checkFuncs(void)
 	 */
-	protected function func(): Diagnosis {
-		$folder = 'func';
-		$files = array('swift.func.php');
-		foreach($files as $file){
-			$path = implode('/', array(swordfish_path, $folder, $file));
-			if(!is_file($path)) $this->errMessages[] = 'Sorry, system function file: [' . $file . '] No found. #_#';
+	protected function checkFuncs(): Diagnosis {
+		$directory = 'func';
+		$files = array('swordfish.func.php');
+		foreach($files as $fileName){
+			$fullName = implode('/', array(swordfish_path, $directory, $fileName));
+			if(!is_file($fullName)) $this->message('Sorry, system function file: [' . $fileName . '] No found. #_#');
 		}
 		return $this;
 	}
 	
 	/**
-	 * protected Diagnosis function core(void)
+	 * protected Diagnosis function checkCores(void)
 	 */
-	protected function core(): Diagnosis {
-		$folder = 'core';
+	protected function checkCores(): Diagnosis {
+		$directory = 'core';
 		$files = array('router', 'controller', 'model', 'mysql', 'validator', 'view', 'processor', 'unique');
 		$extra = '.class.php';
-		foreach($files as $file){
-			$path = implode('/', array(swordfish_path, $folder, $file . $extra));
-			if(!is_file($path)) $this->errMessages[] = 'Sorry, system core library file: [' . $file . $extra . '] NO found. #_#';
+		foreach($files as $fileBasicName){
+			$fileName = $fileBasicName . $extra;
+			$fullName = implode('/', array(swordfish_path, $directory, $fileName));
+			if(!is_file($fullName)) $this->message('Sorry, system core library file : [' . $fileName . '] NO found. #_#');
 		}
 		return $this;
 	}
 	
 	/**
-	 * protected Diagnosis function library(void)
+	 * protected Diagnosis function checkLibraries(void)
 	 */
-	protected function library(): Diagnosis {
-		$folder = 'lib';
+	protected function checkLibraries(): Diagnosis {
+		$directory = 'lib';
 		$files = array();
 		$extra = '.class.php';
-		foreach($files as $file){
-			$path = implode('/', array(swordfish_path, $folder, $file . $extra));
-			if(!is_file($path)) $this->errMessages[] = 'Sorry, system extra library file: [' . $file . $extra . '] NO found. #_#';
+		foreach($files as $fileBasicName){
+			$fileName = $fileBasicName . $extra;
+			$fullName = implode('/', array(swordfish_path, $directory, $fileName));
+			if(!is_file($fullName)) $this->message('Sorry, system extra library file: [' . $fileName . '] NO found. #_#');
 		}
 		return $this;
 	}
 	
 	/**
-	 * protected Diagnosis function config(void)
+	 * protected Diagnosis function checkConfigs(void)
 	 */
-	protected function config(): Diagnosis {
-		$folder = 'conf';
-		$files = array('swift.conf.php');
-		foreach($files as $file){
-			$path = implode('/', array(swordfish_path, $folder, $file));
-			if(!is_file($path)) $this->errMessages[] = 'Sorry, system config file: [' . $file . '] No found. #_#';
+	protected function checkConfigs(): Diagnosis {
+		$directory = 'conf';
+		$files = array('swordfish.conf.php');
+		foreach($files as $fileName){
+			$fullName = implode('/', array(swordfish_path, $directory, $fileName));
+			if(!is_file($fullName)) $this->message('Sorry, system config file: [' . $fileName . '] No found. #_#');
 		}
 		return $this;
 	}
 	
 	/**
-	 * protected Diagnosis function resource(void)
+	 * protected Diagnosis function checkResources(void)
 	 */
-	protected function resource(): Diagnosis {
-		$folder = 'resource';
+	protected function checkResources(): Diagnosis {
+		$directory = 'resource';
 		$files = array('nofound.html');
-		foreach($files as $file){
-			$path = implode('/', array(swordfish_path, $folder, $file));
-			if(!is_file($path)) $this->errMessage[] = 'Sorry, system resource file: [' . $file . '] NO found. #_#';
+		foreach($files as $fileName){
+			$fullName = implode('/', array(swordfish_path, $directory, $fileName));
+			if(!is_file($fullName)) $this->message('Sorry, system resource file: [' . $fileName . '] NO found. #_#');
 		}
 		return $this;
+	}
+	
+	/**
+	 * protected void function message(string $data)
+	 */
+	protected function message(string $data): void {
+		$this->errMessages[] = $data;
 	}
 	
 	/**
