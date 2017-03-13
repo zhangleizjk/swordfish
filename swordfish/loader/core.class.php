@@ -5,76 +5,76 @@ namespace Swordfish;
 class Core {
 	
 	/**
-	 * void public function __construct(void)
+	 * public void function __construct(void)
 	 */
 	public function __construct() {
-		//
+		// echo '-INIT-';
 	}
 	
 	/**
-	 * void public function __destruct(void)
+	 * public void function __destruct(void)
 	 */
 	public function __destruct() {
 		clearstatcache();
 	}
 	
 	/**
-	 * void public function fire(void)
+	 * public void function fire(void)
 	 */
 	public function fire(): void {
-		$this->getSysFuncs()->getSysCores()->getSysLibs()->getSysConfigs();
+		$this->getSysFuncs()->getSysCores()->getSysLibraries()->getSysConfigs();
 	}
 	
 	/**
-	 * Core protected function getSysFuncs()(void)
+	 * protected Core function getSysFuncs()(void)
 	 */
 	protected function getSysFuncs(): Core {
-		$layer = 'func';
-		$file = 'swift.func.php';
-		$fullName = implode('/', array(swordfish_path, $layer, $file));
+		$directory = 'func';
+		$fileName = 'swordfish.func.php';
+		$fullName = implode('/', array(swordfish_path, $directory, $fileName));
 		if(is_file($fullName)) @include_once $fullName;
 		return $this;
 	}
 	
 	/**
-	 * void protected function getClasses(string $dir)
+	 * protected void function getClasses(string $path)
 	 */
-	protected function getClasses(string $dir): void {
-		$pattern = '/^[a-z]+(_[a-z]+)*\.class\.php$/';
-		$path = implode('/', array(swordfish_path, $dir));
+	protected function getClasses(string $path): void {
 		if(is_dir($path)){
-			foreach(scandir($path) as $file){
-				$fullName = implode('/', array($path, $file));
-				if(preg_match($pattern, $file) && is_file($fullName)) @include_once $fullName;
+			foreach(scandir($path) as $fileName){
+				$fullName = implode('/', array($path, $fileName));
+				if(is_class_named_regular($fileName) && is_file($fullName)) @include_once $fullName;
 			}
 		}
 	}
 	
 	/**
-	 * Core protected function getSysCores(void)
+	 * protected Core function getSysCores(void)
 	 */
 	protected function getSysCores(): Core {
-		$layer = 'core';
-		$this->getClasses($layer);
+		$directory = 'core';
+		$path = implode('/', array(swordfish_path, $directory));
+		$this->getClasses($path);
 		return $this;
 	}
 	
 	/**
-	 * Core protected function getSysLibs(void)
+	 * protected Core function getSysLibraries(void)
 	 */
-	protected function getSysLibs(): Core {
-		$layer = 'lib';
-		$this->getClasses($layer);
+	protected function getSysLibraries(): Core {
+		$directory = 'lib';
+		$path = implode('/', array(swordfish_path, $directory));
+		$this->getClasses($path);
 		return $this;
 	}
 	
 	/**
-	 * Core protected function getSysConfigs(void)
+	 * protected Core function getSysConfigs(void)
 	 */
 	protected function getSysConfigs(): Core {
-		$layer = 'conf';
-		$file = 'swift.conf.php';
-		$fullName = implode('/', array(swordfish_path, $layer, $file));
+		$directory = 'conf';
+		$fileName = 'swordfish.conf.php';
+		$fullName = implode('/', array(swordfish_path, $directory, $fileName));
 		if(is_file($fullName)){
 			$configs = @include_once $fullName;
 			if(is_array($configs)){
@@ -85,18 +85,5 @@ class Core {
 		}
 		return $this;
 	}
-	
 	//
 }
-
-
-
-
-
-
-
-
-
-
-
-
